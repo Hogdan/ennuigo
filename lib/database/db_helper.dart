@@ -103,6 +103,14 @@ class DBHelper {
     return await db.insert(tableMoods, row);
   }
 
+  Future<void> deleteMood(int id) async {
+    Database db = await instance.database;
+    // Delete entries referencing this mood first
+    await db.delete(tableEntries, where: '$columnMoodId = ?', whereArgs: [id]);
+    // Then delete the mood
+    await db.delete(tableMoods, where: '$columnId = ?', whereArgs: [id]);
+  }
+
   Future<List<Map<String, dynamic>>> queryAllMoods() async {
     Database db = await instance.database;
     return await db.query(tableMoods);

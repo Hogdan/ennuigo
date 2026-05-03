@@ -88,6 +88,55 @@ class MoodPromptScreenState extends State<MoodPromptScreen> {
                   HapticFeedback.mediumImpact();
                   _selectMood(mood[DBHelper.columnId]);
                 },
+                onLongPress: () {
+                  HapticFeedback.heavyImpact();
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Dialog(
+                        backgroundColor: Colors.transparent,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 30),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[900],
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              GestureDetector(
+                                onTap: () => Navigator.of(context).pop(),
+                                child: Container(
+                                  padding: const EdgeInsets.all(16),
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white10,
+                                  ),
+                                  child: const Icon(Icons.close, color: Colors.white54, size: 40),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () async {
+                                  Navigator.of(context).pop();
+                                  await DBHelper.instance.deleteMood(mood[DBHelper.columnId]);
+                                  _loadMoods();
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.red.withValues(alpha: 0.8),
+                                  ),
+                                  child: const Icon(Icons.delete_outline, color: Colors.red, size: 40),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.white10,
